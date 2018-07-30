@@ -22,14 +22,7 @@ class App extends Component {
 
     return (
       <div className="App">
-        <Map
-          mapPath={MAP_PATH}
-          map={map}
-          style={{
-            transform: "scale(3)",
-            transformOrigin: "top left"
-          }}
-        />
+        <Map mapPath={MAP_PATH} map={map} />
       </div>
     );
   }

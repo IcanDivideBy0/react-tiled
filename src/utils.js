@@ -1,8 +1,8 @@
 import { keyframes } from "styled-components";
 
-const FLIPPED_HORIZONTALLY_FLAG = 0x80000000;
-const FLIPPED_VERTICALLY_FLAG = 0x40000000;
-const FLIPPED_DIAGONALLY_FLAG = 0x20000000;
+export const FLIPPED_HORIZONTALLY_FLAG = 0x80000000;
+export const FLIPPED_VERTICALLY_FLAG = 0x40000000;
+export const FLIPPED_DIAGONALLY_FLAG = 0x20000000;
 
 export function getTileId(tileGid) {
   return (

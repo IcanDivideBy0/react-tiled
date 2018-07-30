@@ -104,7 +104,7 @@ export default class Layer extends React.PureComponent {
   }
 
   renderObjectGroupLayer(layer) {
-    const { map } = this.props;
+    const { map, mapPath } = this.props;
 
     return (
       <GroupLayerWrapper
@@ -119,7 +119,7 @@ export default class Layer extends React.PureComponent {
         }}
       >
         {layer.objects.map((object, idx) => (
-          <LayerObject key={idx} map={map} object={object} />
+          <LayerObject key={idx} map={map} mapPath={mapPath} object={object} />
         ))}
       </GroupLayerWrapper>
     );

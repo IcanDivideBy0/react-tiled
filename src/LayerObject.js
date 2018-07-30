@@ -1,12 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 
+import { getTileSet } from "./utils";
+import Tile from "./Tile";
+
 const LayerObjectWrapper = styled.div`
   position: absolute;
   top: calc(var(--object-pos-y) * 1px);
   left: calc(var(--object-pos-x) * 1px);
-  transform: rotate(calc(var(--object-rotation) * 1deg));
-  transform-origin: top left;
   width: calc(var(--object-width) * 1px);
   height: calc(var(--object-height) * 1px);
 
@@ -26,7 +27,7 @@ const LayerObjectWrapper = styled.div`
 
 export default class LayerObject extends React.PureComponent {
   render() {
-    const { object } = this.props;
+    const { map, mapPath, object } = this.props;
 
     if (!object.visible) return null;
 
@@ -35,7 +36,8 @@ export default class LayerObject extends React.PureComponent {
       "--object-height": object.height,
       "--object-pos-x": object.x,
       "--object-pos-y": object.y,
-      "--object-rotation": object.rotation
+      transform: `rotate(${object.rotation}deg)`,
+      transformOrigin: "top left"
     };
 
     if (object.text) {
@@ -76,9 +78,36 @@ export default class LayerObject extends React.PureComponent {
       });
     }
 
+    if (!!object.gid) {
+      const tileSet = getTileSet(map.tilesets, object.gid);
+
+      Object.assign(style, {
+        "--object-width": tileSet.tilewidth,
+        "--object-height": tileSet.tileheight,
+        transform: `
+          translate(0, -100%)
+          rotate(${object.rotation}deg)
+          scale(
+            ${object.width / tileSet.tilewidth},
+            ${object.height / tileSet.tileheight}
+          )
+          `,
+        transformOrigin: "bottom left"
+      });
+    }
+
     return (
       <LayerObjectWrapper style={style}>
         {!!object.text && object.text.text}
+
+        {!!object.gid && (
+          <Tile
+            map={map}
+            mapPath={mapPath}
+            tileGid={object.gid}
+            pos={{ x: 0, y: 0 }}
+          />
+        )}
       </LayerObjectWrapper>
     );
   }
