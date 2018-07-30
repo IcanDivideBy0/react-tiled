@@ -1,0 +1,85 @@
+import React from "react";
+import styled from "styled-components";
+
+const LayerObjectWrapper = styled.div`
+  position: absolute;
+  top: calc(var(--object-pos-y) * 1px);
+  left: calc(var(--object-pos-x) * 1px);
+  transform: rotate(calc(var(--object-rotation) * 1deg));
+  transform-origin: top left;
+  width: calc(var(--object-width) * 1px);
+  height: calc(var(--object-height) * 1px);
+
+  /* Text styles */
+  display: flex;
+  flex-direction: row;
+  align-items: var(--object-align-items);
+  justify-content: var(--object-justify-content);
+  text-align: var(--object-text-align);
+  color: var(--object-text-color);
+  font-family: var(--object-text-font-family);
+  font-size: calc(var(--object-text-font-size) * 1px);
+  font-weight: var(--object-text-font-weight);
+  font-style: var(--object-text-font-style);
+  text-decoration: var(--object-text-text-decoration);
+`;
+
+export default class LayerObject extends React.PureComponent {
+  render() {
+    const { object } = this.props;
+
+    if (!object.visible) return null;
+
+    const style = {
+      "--object-width": object.width,
+      "--object-height": object.height,
+      "--object-pos-x": object.x,
+      "--object-pos-y": object.y,
+      "--object-rotation": object.rotation
+    };
+
+    if (object.text) {
+      Object.assign(style, {
+        "--object-align-items":
+          object.text.valign === "bottom"
+            ? "flex-end"
+            : object.text.halign === "center"
+              ? "center"
+              : "flex-start",
+        "--object-justify-content":
+          object.text.halign === "right"
+            ? "flex-end"
+            : object.text.halign === "center"
+              ? "center"
+              : object.text.halign === "justify"
+                ? "stretch"
+                : "flex-start",
+        "--object-text-align":
+          object.text.halign === "right"
+            ? "right"
+            : object.text.halign === "center"
+              ? "center"
+              : object.text.halign === "justify"
+                ? "justify"
+                : "left",
+        "--object-text-color": object.text.color,
+        "--object-text-font-family": `"${object.text.fontfamily}"`,
+        "--object-text-font-size": object.text.pixelsize || 16,
+        "--object-text-font-weight": object.text.bold ? 700 : 400,
+        "--object-text-font-style": object.text.italic ? "italic" : "normal",
+        "--object-text-text-decoration": [
+          object.text.underline && "underline",
+          object.text.strikeout && "line-through"
+        ]
+          .filter(v => !!v)
+          .join(" ")
+      });
+    }
+
+    return (
+      <LayerObjectWrapper style={style}>
+        {!!object.text && object.text.text}
+      </LayerObjectWrapper>
+    );
+  }
+}
