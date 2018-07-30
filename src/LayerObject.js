@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { getTileSet } from "./utils";
+import { convertTiledColor, getTileSet } from "./utils";
 import Tile from "./Tile";
 
 const LayerObjectWrapper = styled.div`
@@ -27,7 +27,7 @@ const LayerObjectWrapper = styled.div`
 
 export default class LayerObject extends React.PureComponent {
   render() {
-    const { map, mapPath, object } = this.props;
+    const { map, mapPath, layerColor, object } = this.props;
 
     if (!object.visible) return null;
 
@@ -76,9 +76,7 @@ export default class LayerObject extends React.PureComponent {
           .filter(v => !!v)
           .join(" ")
       });
-    }
-
-    if (!!object.gid) {
+    } else if (!!object.gid) {
       const tileSet = getTileSet(map.tilesets, object.gid);
 
       Object.assign(style, {
@@ -93,6 +91,14 @@ export default class LayerObject extends React.PureComponent {
           )
           `,
         transformOrigin: "bottom left"
+      });
+    } else {
+      Object.assign(style, {
+        backgroundColor: layerColor && convertTiledColor(layerColor, 0.3),
+        outlineColor: layerColor && convertTiledColor(layerColor),
+        outlineStyle: "solid",
+        outlineWidth: 1,
+        borderRadius: 0.5
       });
     }
 

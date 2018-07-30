@@ -4,6 +4,15 @@ export const FLIPPED_HORIZONTALLY_FLAG = 0x80000000;
 export const FLIPPED_VERTICALLY_FLAG = 0x40000000;
 export const FLIPPED_DIAGONALLY_FLAG = 0x20000000;
 
+export function convertTiledColor(tiledColor, alpha = 1) {
+  let [a, r, g, b] = tiledColor.match(/([0-9]|[a-f]){1,2}/gi);
+  if (!b) [r, g, b, a] = [a, r, g, "ff"];
+
+  [r, g, b, a] = [r, g, b, a].map(v => parseInt(v, 16));
+
+  return `rgba(${r}, ${g}, ${b}, ${(a / 255) * alpha})`;
+}
+
 export function getTileId(tileGid) {
   return (
     tileGid &

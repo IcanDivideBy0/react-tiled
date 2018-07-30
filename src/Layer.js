@@ -75,11 +75,12 @@ export default class Layer extends React.PureComponent {
           "--tile-height": map.tileheight,
           "--layer-width": layer.width,
           "--layer-height": layer.height,
-          "--layer-x": layer.x,
-          "--layer-y": layer.y,
+          "--layer-x": layer.x + layer.startx,
+          "--layer-y": layer.y + layer.starty,
           "--layer-offset-x": layer.offsetx || 0,
           "--layer-offset-y": layer.offsety || 0,
-          "--layer-opacity": layer.opacity
+          "--layer-opacity": layer.opacity,
+          "--foo": layer.starty
         }}
       >
         {!!layer.data && this.renderTileLayerData(layer.data, layer.width)}
@@ -92,8 +93,8 @@ export default class Layer extends React.PureComponent {
               style={{
                 "--chunk-width": chunk.width,
                 "--chunk-height": chunk.height,
-                "--chunk-x": chunk.x,
-                "--chunk-y": chunk.y
+                "--chunk-x": chunk.x - layer.startx,
+                "--chunk-y": chunk.y - layer.starty
               }}
             >
               {this.renderTileLayerData(chunk.data, chunk.width)}
@@ -119,7 +120,13 @@ export default class Layer extends React.PureComponent {
         }}
       >
         {layer.objects.map((object, idx) => (
-          <LayerObject key={idx} map={map} mapPath={mapPath} object={object} />
+          <LayerObject
+            key={idx}
+            map={map}
+            mapPath={mapPath}
+            layerColor={layer.color}
+            object={object}
+          />
         ))}
       </GroupLayerWrapper>
     );
@@ -151,6 +158,13 @@ export default class Layer extends React.PureComponent {
     const { layer } = this.props;
 
     if (!layer.visible) return null;
+
+    if (layer.encoding) {
+      console.error(
+        "[react-tiled] Only CSV layer encoding is supported for now."
+      );
+      return null;
+    }
 
     switch (layer.type) {
       case "tilelayer":
