@@ -1,9 +1,16 @@
 import React from "react";
-import PropTypes from "prop-types";
 import styled from "styled-components";
 
-import { mapPropType } from "./propTypes";
 import Layer from "./Layer";
+
+const { Provider: MapProvider, Consumer: _MapConsumer } = React.createContext();
+export const MapConsumer = _MapConsumer;
+
+const {
+  Provider: MapPathProvider,
+  Consumer: _MapPathConsumer
+} = React.createContext();
+export const MapPathConsumer = _MapPathConsumer;
 
 const MapWrapper = styled.div`
   position: relative;
@@ -21,11 +28,6 @@ const MapWrapper = styled.div`
 `;
 
 export default class Map extends React.PureComponent {
-  static propTypes = {
-    map: mapPropType,
-    mapPath: PropTypes.string.isRequired
-  };
-
   state = {
     map: null,
     error: null
@@ -49,11 +51,15 @@ export default class Map extends React.PureComponent {
           ...style
         }}
       >
-        {map.layers.map((layer, idx) => (
-          <Layer key={idx} map={map} mapPath={mapPath} layer={layer} />
-        ))}
+        <MapProvider value={map}>
+          <MapPathProvider value={mapPath}>
+            {map.layers.map((layer, idx) => (
+              <Layer key={idx} layer={layer} />
+            ))}
 
-        {children}
+            {children}
+          </MapPathProvider>
+        </MapProvider>
       </MapWrapper>
     );
   }

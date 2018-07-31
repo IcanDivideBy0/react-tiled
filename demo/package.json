@@ -7,7 +7,8 @@
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-scripts": "1.1.4",
-    "react-tiled": "link:.."
+    "react-tiled": "link:..",
+    "styled-components": "^3.3.3"
   },
   "scripts": {
     "start": "react-scripts start",

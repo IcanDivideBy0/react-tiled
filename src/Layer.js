@@ -1,8 +1,8 @@
 import React from "react";
-import PropTypes from "prop-types";
 import styled from "styled-components";
 
-import { mapPropType } from "./propTypes";
+import withMap from "./withMap";
+
 import Tile from "./Tile";
 import LayerObject from "./LayerObject";
 
@@ -38,22 +38,13 @@ const GroupLayerWrapper = styled.div`
   opacity: var(--layer-opacity);
 `;
 
-export default class Layer extends React.PureComponent {
-  static propTypes = {
-    map: mapPropType,
-    mapPath: PropTypes.string.isRequired
-  };
-
+class Layer extends React.PureComponent {
   renderTileLayerData(data, width) {
-    const { map, mapPath } = this.props;
-
     return data.map(
       (tileGid, idx) =>
         !!tileGid && (
           <Tile
             key={idx}
-            map={map}
-            mapPath={mapPath}
             tileGid={tileGid}
             pos={{
               x: idx % width,
@@ -105,7 +96,7 @@ export default class Layer extends React.PureComponent {
   }
 
   renderObjectGroupLayer(layer) {
-    const { map, mapPath } = this.props;
+    const { map } = this.props;
 
     return (
       <GroupLayerWrapper
@@ -123,7 +114,6 @@ export default class Layer extends React.PureComponent {
           <LayerObject
             key={idx}
             map={map}
-            mapPath={mapPath}
             layerColor={layer.color}
             object={object}
           />
@@ -181,3 +171,5 @@ export default class Layer extends React.PureComponent {
     }
   }
 }
+
+export default withMap(Layer);

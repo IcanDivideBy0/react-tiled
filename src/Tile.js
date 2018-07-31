@@ -2,7 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
-import { mapPropType } from "./propTypes";
+import withMap from "./withMap";
+import withMapPath from "./withMapPath";
+
 import {
   getTileSet,
   getTileBgPos,
@@ -22,10 +24,8 @@ const TileWrapper = styled.div`
   left: calc(var(--pos-x) * var(--tile-width) * 1px);
 `;
 
-export default class Tile extends React.PureComponent {
+class Tile extends React.PureComponent {
   static propTypes = {
-    map: mapPropType.isRequired,
-    mapPath: PropTypes.string.isRequired,
     tileGid: PropTypes.number.isRequired,
     pos: PropTypes.shape({
       x: PropTypes.number.isRequired,
@@ -60,3 +60,5 @@ export default class Tile extends React.PureComponent {
     );
   }
 }
+
+export default withMap(withMapPath(Tile));

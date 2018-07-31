@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 
 import { convertTiledColor, getTileSet } from "./utils";
+import withMap from "./withMap";
+
 import Tile from "./Tile";
 
 const LayerObjectWrapper = styled.div`
@@ -25,9 +27,9 @@ const LayerObjectWrapper = styled.div`
   text-decoration: var(--object-text-text-decoration);
 `;
 
-export default class LayerObject extends React.PureComponent {
+class LayerObject extends React.PureComponent {
   render() {
-    const { map, mapPath, layerColor, object } = this.props;
+    const { map, layerColor, object } = this.props;
 
     if (!object.visible) return null;
 
@@ -106,15 +108,10 @@ export default class LayerObject extends React.PureComponent {
       <LayerObjectWrapper style={style}>
         {!!object.text && object.text.text}
 
-        {!!object.gid && (
-          <Tile
-            map={map}
-            mapPath={mapPath}
-            tileGid={object.gid}
-            pos={{ x: 0, y: 0 }}
-          />
-        )}
+        {!!object.gid && <Tile tileGid={object.gid} pos={{ x: 0, y: 0 }} />}
       </LayerObjectWrapper>
     );
   }
 }
+
+export default withMap(LayerObject);
