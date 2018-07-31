@@ -2,8 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { convertTiledColor, getTileSet } from "./utils";
-import withMap from "./withMap";
-
+import { withMap } from "./MapLoader";
 import Tile from "./Tile";
 
 const LayerObjectWrapper = styled.div`
@@ -66,7 +65,7 @@ class LayerObject extends React.PureComponent {
               : object.text.halign === "justify"
                 ? "justify"
                 : "left",
-        "--object-text-color": object.text.color,
+        "--object-text-color": convertTiledColor(object.text.color),
         "--object-text-font-family": `"${object.text.fontfamily}"`,
         "--object-text-font-size": object.text.pixelsize || 16,
         "--object-text-font-weight": object.text.bold ? 700 : 400,

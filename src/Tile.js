@@ -2,8 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
-import withMap from "./withMap";
-import withMapPath from "./withMapPath";
+import { withMap } from "./MapLoader";
 
 import {
   getTileSet,
@@ -61,4 +60,4 @@ class Tile extends React.PureComponent {
   }
 }
 
-export default withMap(withMapPath(Tile));
+export default withMap(Tile);

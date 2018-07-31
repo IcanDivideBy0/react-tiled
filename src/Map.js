@@ -1,16 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
+import { withMap } from "./MapLoader";
 import Layer from "./Layer";
-
-const { Provider: MapProvider, Consumer: _MapConsumer } = React.createContext();
-export const MapConsumer = _MapConsumer;
-
-const {
-  Provider: MapPathProvider,
-  Consumer: _MapPathConsumer
-} = React.createContext();
-export const MapPathConsumer = _MapPathConsumer;
 
 const MapWrapper = styled.div`
   position: relative;
@@ -27,16 +19,14 @@ const MapWrapper = styled.div`
   -ms-interpolation-mode: nearest-neighbor;
 `;
 
-export default class Map extends React.PureComponent {
+class Map extends React.PureComponent {
   state = {
     map: null,
     error: null
   };
 
   render() {
-    const { map, mapPath, style, children } = this.props;
-
-    if (!map) return null;
+    const { map, style, children } = this.props;
 
     return (
       <MapWrapper
@@ -51,16 +41,14 @@ export default class Map extends React.PureComponent {
           ...style
         }}
       >
-        <MapProvider value={map}>
-          <MapPathProvider value={mapPath}>
-            {map.layers.map((layer, idx) => (
-              <Layer key={idx} layer={layer} />
-            ))}
+        {map.layers.map((layer, idx) => (
+          <Layer key={idx} layer={layer} />
+        ))}
 
-            {children}
-          </MapPathProvider>
-        </MapProvider>
+        {children}
       </MapWrapper>
     );
   }
 }
+
+export default withMap(Map);
