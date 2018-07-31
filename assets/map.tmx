@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.6" orientation="orthogonal" renderorder="right-down" width="16" height="16" tilewidth="16" tileheight="16" infinite="1" backgroundcolor="#1c1117" nextobjectid="65">
+<map version="1.0" tiledversion="1.1.6" orientation="orthogonal" renderorder="right-down" width="16" height="16" tilewidth="16" tileheight="16" infinite="1" backgroundcolor="#1c1117" nextobjectid="68">
  <tileset firstgid="1" name="0x72_16x16DungeonTileset.v4" tilewidth="16" tileheight="16" tilecount="256" columns="16">
   <image source="0x72_16x16DungeonTileset.v4.png" width="256" height="256"/>
   <tile id="152">
@@ -99,6 +99,10 @@
 </chunk>
   </data>
  </layer>
+ <objectgroup name="Objects">
+  <object id="65" gid="233" x="109.424" y="134.242" width="16" height="16"/>
+  <object id="67" gid="166" x="135.455" y="102.727" width="16" height="16"/>
+ </objectgroup>
  <layer name="Darkness" width="16" height="16">
   <data encoding="csv">
    <chunk x="0" y="0" width="16" height="16">
