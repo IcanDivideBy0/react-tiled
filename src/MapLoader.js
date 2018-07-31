@@ -10,7 +10,8 @@ const { Provider, Consumer } = React.createContext();
 
 export default class MapLoader extends React.Component {
   static propTypes = {
-    mapUrl: PropTypes.string.isRequired
+    mapUrl: PropTypes.string.isRequired,
+    onMapLoaded: PropTypes.func
   };
 
   state = {
@@ -18,7 +19,7 @@ export default class MapLoader extends React.Component {
   };
 
   componentDidMount() {
-    const { mapUrl } = this.props;
+    const { mapUrl, onMapLoaded } = this.props;
     const [, mapPath] = mapUrl.match(/^(.*\/)([^/]*)$/);
 
     fetch(mapUrl)
@@ -30,6 +31,8 @@ export default class MapLoader extends React.Component {
             mapPath
           }
         });
+
+        if (onMapLoaded) onMapLoaded(map);
       })
       .catch(err => console.error(err));
   }

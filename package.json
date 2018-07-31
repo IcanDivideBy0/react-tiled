@@ -1,6 +1,6 @@
 {
   "name": "react-tiled",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "license": "MIT",
   "author": "Samuel Hurel <samuel.hurel@gmail.com>",
   "main": "dist/index.js",
