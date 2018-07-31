@@ -22,8 +22,6 @@ export default class MapProvider extends React.Component {
     const { mapUrl, onMapLoaded } = this.props;
     const [, mapPath] = mapUrl.match(/^(.*\/)([^/]*)$/);
 
-    console.log(mapPath);
-
     fetch(mapUrl)
       .then(res => res.json())
       .then(map => {
