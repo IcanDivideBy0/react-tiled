@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { withMap } from "./MapLoader";
+import { withMap } from "./MapProvider";
 import Layer from "./Layer";
 
 const MapWrapper = styled.div`

@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { convertTiledColor, getTileSet } from "./utils";
-import { withMap } from "./MapLoader";
+import { withMap } from "./MapProvider";
 import Tile from "./Tile";
 
 const LayerObjectWrapper = styled.div`

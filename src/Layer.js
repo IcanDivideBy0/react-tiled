@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { withMap } from "./MapLoader";
+import { withMap } from "./MapProvider";
 import Tile from "./Tile";
 import LayerObject from "./LayerObject";
 

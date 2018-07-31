@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { MapLoader, Map } from "react-tiled";
+import { MapProvider, Map } from "react-tiled";
 import styled from "styled-components";
 
 const AppWrapper = styled.div`
@@ -13,11 +13,11 @@ const AppWrapper = styled.div`
 class App extends Component {
   render() {
     return (
-      <MapLoader mapUrl={process.env.PUBLIC_URL + "/assets/map.json"}>
+      <MapProvider mapUrl={process.env.PUBLIC_URL + "/assets/map.json"}>
         <AppWrapper>
           <Map style={{ transform: "scale(2)" }} />
         </AppWrapper>
-      </MapLoader>
+      </MapProvider>
     );
   }
 }

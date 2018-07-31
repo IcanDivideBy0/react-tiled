@@ -8,7 +8,7 @@ const { Provider, Consumer } = React.createContext();
  * Provider
  */
 
-export default class MapLoader extends React.Component {
+export default class MapProvider extends React.Component {
   static propTypes = {
     mapUrl: PropTypes.string.isRequired,
     onMapLoaded: PropTypes.func
@@ -21,6 +21,8 @@ export default class MapLoader extends React.Component {
   componentDidMount() {
     const { mapUrl, onMapLoaded } = this.props;
     const [, mapPath] = mapUrl.match(/^(.*\/)([^/]*)$/);
+
+    console.log(mapPath);
 
     fetch(mapUrl)
       .then(res => res.json())
@@ -76,3 +78,5 @@ export function withMap(WrappedComponent) {
     WrappedComponent
   );
 }
+
+export const MapConsumer = Consumer;
