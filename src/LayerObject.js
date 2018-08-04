@@ -95,11 +95,7 @@ class LayerObject extends React.PureComponent {
       });
     } else {
       Object.assign(style, {
-        backgroundColor: layerColor && convertTiledColor(layerColor, 0.3),
-        outlineColor: layerColor && convertTiledColor(layerColor),
-        outlineStyle: "solid",
-        outlineWidth: 1,
-        borderRadius: 0.5
+        backgroundColor: layerColor && convertTiledColor(layerColor)
       });
     }
 

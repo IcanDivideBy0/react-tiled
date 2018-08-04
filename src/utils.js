@@ -34,6 +34,13 @@ export function getTileSet(tileSets, tileGid) {
   );
 }
 
+export function getTileConfig(tileSet, tileGid) {
+  if (!tileSet.tiles) return null;
+
+  const tileId = getTileId(tileGid);
+  return tileSet.tiles[tileId - tileSet.firstgid];
+}
+
 export function getTileBgPos(tileSet, tileGid) {
   const tileId = getTileId(tileGid);
 
@@ -45,11 +52,8 @@ export function getTileBgPos(tileSet, tileGid) {
   };
 }
 
-export function getTileAnimation(tileSet, tileGid) {
-  if (!tileSet.tiles) return null;
-
-  const tileId = getTileId(tileGid);
-  const tileConfig = tileSet.tiles[tileId - tileSet.firstgid];
+export function getTileAnimationJss(tileSet, tileGid) {
+  const tileConfig = getTileConfig(tileSet, tileGid);
 
   if (!tileConfig) return null;
   if (!tileConfig.animation) return null;
@@ -104,7 +108,10 @@ export function getTileTransform(tileSet, tileGid) {
     rotate = -90;
   }
 
-  return {
-    transform: `scale(${scaleX}, ${scaleY}) rotate(${rotate}deg)`
-  };
+  return { scaleX, scaleY, rotate };
+}
+
+export function getTileTransformJss(tileSet, tileGid) {
+  const { scaleX, scaleY, rotate } = getTileTransform(tileSet, tileGid);
+  return { transform: `scale(${scaleX}, ${scaleY}) rotate(${rotate}deg)` };
 }

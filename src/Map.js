@@ -26,7 +26,7 @@ class Map extends React.PureComponent {
   };
 
   render() {
-    const { map, style, children } = this.props;
+    const { map, debug, style, children } = this.props;
 
     return (
       <MapWrapper
@@ -42,7 +42,7 @@ class Map extends React.PureComponent {
         }}
       >
         {map.layers.map((layer, idx) => (
-          <Layer key={idx} layer={layer} />
+          <Layer key={idx} layer={layer} debug={debug} />
         ))}
 
         {children}

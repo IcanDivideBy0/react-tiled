@@ -7,8 +7,8 @@ import { withMap } from "./MapProvider";
 import {
   getTileSet,
   getTileBgPos,
-  getTileAnimation,
-  getTileTransform
+  getTileAnimationJss,
+  getTileTransformJss
 } from "./utils";
 
 const TileWrapper = styled.div`
@@ -52,8 +52,8 @@ class Tile extends React.PureComponent {
           "--pos-x": pos.x,
           "--pos-y": pos.y,
 
-          ...getTileAnimation(tileSet, tileGid),
-          ...getTileTransform(tileSet, tileGid)
+          ...getTileAnimationJss(tileSet, tileGid),
+          ...getTileTransformJss(tileSet, tileGid)
         }}
       />
     );

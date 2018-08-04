@@ -144,9 +144,10 @@ class Layer extends React.PureComponent {
   }
 
   render() {
-    const { layer } = this.props;
+    const { layer, debug } = this.props;
 
     if (!layer.visible) return null;
+    if (layer.properties && layer.properties.debugOnly && !debug) return null;
 
     if (layer.encoding) {
       console.error(
