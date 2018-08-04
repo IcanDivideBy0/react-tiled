@@ -17,7 +17,9 @@
     "eject": "react-scripts eject",
     "lint": "eslint src",
     "predeploy": "yarn build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "build:map": "tiled ./map.tmx --export-map ./public/assets/map.json",
+    "watch:map": "echo './map.tmx' | entr yarn build:map"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",

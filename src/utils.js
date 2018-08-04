@@ -13,7 +13,7 @@ export function convertTiledColor(tiledColor, alpha = 1) {
   return `rgba(${r}, ${g}, ${b}, ${(a / 255) * alpha})`;
 }
 
-export function getTileId(tileGid) {
+export function cleanTileGid(tileGid) {
   return (
     tileGid &
     ~(
@@ -24,38 +24,31 @@ export function getTileId(tileGid) {
   );
 }
 
-export function getTileSet(tileSets, tileGid) {
-  const tileId = getTileId(tileGid);
-
-  return tileSets.find(
-    tileSet =>
-      tileId >= tileSet.firstgid &&
-      tileId < tileSet.firstgid + tileSet.tilecount
-  );
+export function getTileId(tileSet, tileGid) {
+  const cleanedTileGid = cleanTileGid(tileGid);
+  return cleanedTileGid - tileSet.firstgid;
 }
 
 export function getTileConfig(tileSet, tileGid) {
   if (!tileSet.tiles) return null;
 
-  const tileId = getTileId(tileGid);
-  return tileSet.tiles[tileId - tileSet.firstgid];
+  const tileId = getTileId(tileSet, tileGid);
+  return tileSet.tiles[tileId];
 }
 
 export function getTileBgPos(tileSet, tileGid) {
-  const tileId = getTileId(tileGid);
+  const tileId = getTileId(tileSet, tileGid);
 
   return {
-    x: ((tileId - tileSet.firstgid) % tileSet.columns) * -tileSet.tilewidth,
-    y:
-      Math.floor((tileId - tileSet.firstgid) / tileSet.columns) *
-      -tileSet.tileheight
+    x: (tileId % tileSet.columns) * -tileSet.tilewidth,
+    y: Math.floor(tileId / tileSet.columns) * -tileSet.tileheight
   };
 }
 
 export function getTileProperties(tileSet, tileGid) {
-  const tileId = getTileId(tileGid);
+  const tileId = getTileId(tileSet, tileGid);
   const tilesProperties = tileSet.tileproperties || {};
-  return tilesProperties[tileId - tileSet.firstgid] || {};
+  return tilesProperties[tileId] || {};
 }
 
 export function getTileProperty(tileSet, tileGid, propertyName, defaultValue) {
@@ -134,4 +127,23 @@ export function getLayerProperties(layer) {
 export function getLayerProperty(layer, propertyName, defaultValue) {
   const properties = getLayerProperties(layer);
   return propertyName in properties ? properties[propertyName] : defaultValue;
+}
+
+export function getTileSet(tileSets, tileGid) {
+  const cleanedTileGid = cleanTileGid(tileGid);
+
+  return tileSets.find(
+    tileSet =>
+      cleanedTileGid >= tileSet.firstgid &&
+      cleanedTileGid < tileSet.firstgid + tileSet.tilecount
+  );
+}
+
+export function getTileSetByName(tileSets, tileSetName) {
+  return tileSets.find(tileSet => tileSet.name === tileSetName);
+}
+
+export function getTileGid(tileSets, tileSetName, tileId) {
+  const tileSet = getTileSetByName(tileSets, tileSetName);
+  return !tileSet ? 0 : tileId + tileSet.firstgid;
 }
