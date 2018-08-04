@@ -12,15 +12,9 @@ import {
 } from "./utils";
 
 const TileWrapper = styled.div`
-  background-image: var(--tile-image);
-  background-position: calc(var(--bg-pos-x) * 1px) calc(var(--bg-pos-y) * 1px);
+  background-image: var(--tileset-image);
   background-repeat: no-repeat;
-  width: calc(var(--tile-width) * 1px);
-  height: calc(var(--tile-height) * 1px);
-
   position: absolute;
-  top: calc(var(--pos-y) * var(--tile-height) * 1px);
-  left: calc(var(--pos-x) * var(--tile-width) * 1px);
 `;
 
 class Tile extends React.PureComponent {
@@ -29,11 +23,12 @@ class Tile extends React.PureComponent {
     pos: PropTypes.shape({
       x: PropTypes.number.isRequired,
       y: PropTypes.number.isRequired
-    }).isRequired
+    }).isRequired,
+    zAuto: PropTypes.bool
   };
 
   render() {
-    const { map, mapPath, tileGid, pos } = this.props;
+    const { map, mapPath, tileGid, pos, zAuto } = this.props;
 
     const tileSet = getTileSet(map.tilesets, tileGid);
     if (!tileSet) return null;
@@ -44,13 +39,14 @@ class Tile extends React.PureComponent {
       <TileWrapper
         className="tiled-tile"
         style={{
-          "--tile-width": tileSet.tilewidth,
-          "--tile-height": tileSet.tileheight,
-          "--tile-image": `url(${mapPath}/${tileSet.image})`,
-          "--bg-pos-x": bgPos.x,
-          "--bg-pos-y": bgPos.y,
-          "--pos-x": pos.x,
-          "--pos-y": pos.y,
+          "--tileset-image": `url(${mapPath}/${tileSet.image})`,
+          backgroundPosition: `${bgPos.x}px ${bgPos.y}px`,
+          width: tileSet.tilewidth,
+          height: tileSet.tileheight,
+          top: pos.y,
+          left: pos.x,
+          // zIndex: zIndex || "initial",
+          zIndex: zAuto ? pos.y + tileSet.tileheight : "initial",
 
           ...getTileAnimationJss(tileSet, tileGid),
           ...getTileTransformJss(tileSet, tileGid)

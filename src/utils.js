@@ -115,3 +115,10 @@ export function getTileTransformJss(tileSet, tileGid) {
   const { scaleX, scaleY, rotate } = getTileTransform(tileSet, tileGid);
   return { transform: `scale(${scaleX}, ${scaleY}) rotate(${rotate}deg)` };
 }
+
+export function getLayerProperty(layer, propertyName, defaultValue) {
+  if (!("properties" in layer)) return defaultValue;
+  if (!(propertyName in layer.properties)) return defaultValue;
+
+  return layer.properties[propertyName];
+}

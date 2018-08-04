@@ -38,7 +38,8 @@ class LayerObject extends React.PureComponent {
       "--object-pos-x": object.x,
       "--object-pos-y": object.y,
       transform: `rotate(${object.rotation}deg)`,
-      transformOrigin: "top left"
+      transformOrigin: "top left",
+      zIndex: Math.round(object.y + object.height)
     };
 
     if (object.text) {

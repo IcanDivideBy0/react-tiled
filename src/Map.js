@@ -6,8 +6,8 @@ import Layer from "./Layer";
 
 const MapWrapper = styled.div`
   position: relative;
-  width: calc(var(--map-width) * var(--tile-width) * 1px);
-  height: calc(var(--map-height) * var(--tile-height) * 1px);
+  width: calc(var(--map-width) * var(--map-tile-width) * 1px);
+  height: calc(var(--map-height) * var(--map-tile-height) * 1px);
   background-color: var(--map-bg-color);
 
   image-rendering: optimizeSpeed;
@@ -35,8 +35,8 @@ class Map extends React.PureComponent {
           "--map-width": map.width,
           "--map-height": map.height,
           "--map-bg-color": map.backgroundcolor || "rgba(0, 0, 0, 0)",
-          "--tile-width": map.tilewidth,
-          "--tile-height": map.tileheight,
+          "--map-tile-width": map.tilewidth,
+          "--map-tile-height": map.tileheight,
 
           ...style
         }}

@@ -1,30 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 
+import { getLayerProperty } from "./utils";
 import { withMap } from "./MapProvider";
 import Tile from "./Tile";
 import LayerObject from "./LayerObject";
-
-const TileLayerWrapper = styled.div`
-  position: absolute;
-  width: calc(var(--layer-width) * var(--tile-width) * 1px);
-  height: calc(var(--layer-height) * var(--tile-height) * 1px);
-  top: calc(
-    ((var(--layer-y)) * var(--tile-height) + var(--layer-offset-y)) * 1px
-  );
-  left: calc(
-    ((var(--layer-x)) * var(--tile-width) + var(--layer-offset-x)) * 1px
-  );
-  opacity: var(--layer-opacity);
-`;
-
-const TileLayerChunkWrapper = styled.div`
-  position: absolute;
-  width: calc(var(--chunk-width) * var(--tile-width) * 1px);
-  height: calc(var(--chunk-height) * var(--tile-height) * 1px);
-  top: calc(((var(--chunk-y)) * var(--tile-height)) * 1px);
-  left: calc(((var(--chunk-x)) * var(--tile-width)) * 1px);
-`;
 
 const GroupLayerWrapper = styled.div`
   position: absolute;
@@ -38,7 +18,9 @@ const GroupLayerWrapper = styled.div`
 `;
 
 class Layer extends React.PureComponent {
-  renderTileLayerData(data, width) {
+  renderTileLayerData(data, width, offset, zAuto) {
+    const { map } = this.props;
+
     return data.map(
       (tileGid, idx) =>
         !!tileGid && (
@@ -46,9 +28,10 @@ class Layer extends React.PureComponent {
             key={idx}
             tileGid={tileGid}
             pos={{
-              x: idx % width,
-              y: Math.floor(idx / width)
+              x: offset.x + (idx % width) * map.tilewidth,
+              y: offset.y + Math.floor(idx / width) * map.tileheight
             }}
+            zAuto={zAuto}
           />
         )
     );
@@ -57,40 +40,37 @@ class Layer extends React.PureComponent {
   renderTileLayer(layer) {
     const { map } = this.props;
 
+    const layerOffset = {
+      x: (layer.x + layer.startx) * map.tilewidth + (layer.offsetx || 0),
+      y: (layer.y + layer.starty) * map.tileheight + (layer.offsety || 0)
+    };
+
+    const zAuto = getLayerProperty(layer, "zAuto");
+
     return (
-      <TileLayerWrapper
-        className="tiled-layer"
-        style={{
-          "--tile-width": map.tilewidth,
-          "--tile-height": map.tileheight,
-          "--layer-width": layer.width,
-          "--layer-height": layer.height,
-          "--layer-x": layer.x + layer.startx,
-          "--layer-y": layer.y + layer.starty,
-          "--layer-offset-x": layer.offsetx || 0,
-          "--layer-offset-y": layer.offsety || 0,
-          "--layer-opacity": layer.opacity,
-          "--foo": layer.starty
-        }}
-      >
-        {!!layer.data && this.renderTileLayerData(layer.data, layer.width)}
+      <React.Fragment>
+        {!!layer.data &&
+          this.renderTileLayerData(layer.data, layer.width, layerOffset, zAuto)}
 
         {!!layer.chunks &&
-          layer.chunks.map((chunk, idx) => (
-            <TileLayerChunkWrapper
-              key={idx}
-              className="tiled-layer-chunk"
-              style={{
-                "--chunk-width": chunk.width,
-                "--chunk-height": chunk.height,
-                "--chunk-x": chunk.x - layer.startx,
-                "--chunk-y": chunk.y - layer.starty
-              }}
-            >
-              {this.renderTileLayerData(chunk.data, chunk.width)}
-            </TileLayerChunkWrapper>
-          ))}
-      </TileLayerWrapper>
+          layer.chunks.map((chunk, idx) => {
+            const chunkOffset = {
+              x: layerOffset.x + (chunk.x - layer.startx) * map.tilewidth,
+              y: layerOffset.y + (chunk.y - layer.starty) * map.tileheight
+            };
+
+            return (
+              <React.Fragment key={idx}>
+                {this.renderTileLayerData(
+                  chunk.data,
+                  chunk.width,
+                  chunkOffset,
+                  zAuto
+                )}
+              </React.Fragment>
+            );
+          })}
+      </React.Fragment>
     );
   }
 
@@ -100,8 +80,6 @@ class Layer extends React.PureComponent {
     return (
       <GroupLayerWrapper
         style={{
-          "--tile-width": map.tilewidth,
-          "--tile-height": map.tileheight,
           "--layer-x": layer.x,
           "--layer-y": layer.y,
           "--layer-offset-x": layer.offsetx || 0,
@@ -127,8 +105,6 @@ class Layer extends React.PureComponent {
     return (
       <GroupLayerWrapper
         style={{
-          "--tile-width": map.tilewidth,
-          "--tile-height": map.tileheight,
           "--layer-x": layer.x,
           "--layer-y": layer.y,
           "--layer-offset-x": layer.offsetx || 0,
@@ -147,7 +123,7 @@ class Layer extends React.PureComponent {
     const { layer, debug } = this.props;
 
     if (!layer.visible) return null;
-    if (layer.properties && layer.properties.debugOnly && !debug) return null;
+    if (getLayerProperty(layer, "debugOnly", false) && !debug) return null;
 
     if (layer.encoding) {
       console.error(
