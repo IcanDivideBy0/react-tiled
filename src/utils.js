@@ -52,6 +52,17 @@ export function getTileBgPos(tileSet, tileGid) {
   };
 }
 
+export function getTileProperties(tileSet, tileGid) {
+  const tileId = getTileId(tileGid);
+  const tilesProperties = tileSet.tileproperties || {};
+  return tilesProperties[tileId - tileSet.firstgid] || {};
+}
+
+export function getTileProperty(tileSet, tileGid, propertyName, defaultValue) {
+  const properties = getTileProperties(tileSet, tileGid);
+  return propertyName in properties ? properties[propertyName] : defaultValue;
+}
+
 export function getTileAnimationJss(tileSet, tileGid) {
   const tileConfig = getTileConfig(tileSet, tileGid);
 
@@ -116,9 +127,11 @@ export function getTileTransformJss(tileSet, tileGid) {
   return { transform: `scale(${scaleX}, ${scaleY}) rotate(${rotate}deg)` };
 }
 
-export function getLayerProperty(layer, propertyName, defaultValue) {
-  if (!("properties" in layer)) return defaultValue;
-  if (!(propertyName in layer.properties)) return defaultValue;
+export function getLayerProperties(layer) {
+  return layer.properties || {};
+}
 
-  return layer.properties[propertyName];
+export function getLayerProperty(layer, propertyName, defaultValue) {
+  const properties = getLayerProperties(layer);
+  return propertyName in properties ? properties[propertyName] : defaultValue;
 }

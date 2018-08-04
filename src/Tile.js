@@ -7,6 +7,7 @@ import { withMap } from "./MapProvider";
 import {
   getTileSet,
   getTileBgPos,
+  getTileProperty,
   getTileAnimationJss,
   getTileTransformJss
 } from "./utils";
@@ -35,6 +36,11 @@ class Tile extends React.PureComponent {
 
     const bgPos = getTileBgPos(tileSet, tileGid);
 
+    const zIndex =
+      zAuto || getTileProperty(tileSet, tileGid, "zAuto")
+        ? pos.y + tileSet.tileheight
+        : "initial";
+
     return (
       <TileWrapper
         className="tiled-tile"
@@ -45,8 +51,7 @@ class Tile extends React.PureComponent {
           height: tileSet.tileheight,
           top: pos.y,
           left: pos.x,
-          // zIndex: zIndex || "initial",
-          zIndex: zAuto ? pos.y + tileSet.tileheight : "initial",
+          zIndex,
 
           ...getTileAnimationJss(tileSet, tileGid),
           ...getTileTransformJss(tileSet, tileGid)
