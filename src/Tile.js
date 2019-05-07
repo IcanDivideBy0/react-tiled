@@ -45,7 +45,7 @@ class Tile extends React.PureComponent {
       <TileWrapper
         className="tiled-tile"
         style={{
-          "--tileset-image": `url(${mapPath}/${tileSet.image})`,
+          "--tileset-image": `url(${encodeURI(mapPath)}/${encodeURI(tileSet.image)})`,
           backgroundPosition: `${bgPos.x}px ${bgPos.y}px`,
           width: tileSet.tilewidth,
           height: tileSet.tileheight,

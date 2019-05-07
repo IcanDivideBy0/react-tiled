@@ -41,8 +41,8 @@ class Layer extends React.PureComponent {
     const { map } = this.props;
 
     const layerOffset = {
-      x: (layer.x + layer.startx) * map.tilewidth + (layer.offsetx || 0),
-      y: (layer.y + layer.starty) * map.tileheight + (layer.offsety || 0)
+      x: (layer.x + layer.startx || 0) * map.tilewidth + (layer.offsetx || 0),
+      y: (layer.y + layer.starty || 0) * map.tileheight + (layer.offsety || 0)
     };
 
     const zAuto = getLayerProperty(layer, "zAuto");
