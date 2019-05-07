@@ -71,10 +71,7 @@ export function withMap(WrappedComponent) {
   WithMap.displayName = `withMap(${getDisplayName(WrappedComponent)})`;
 
   const Component = React.forwardRef(WithMap);
-  return hoistNonReactStatic(
-    props => <Component {...props} />,
-    WrappedComponent
-  );
+  return hoistNonReactStatic(Component, WrappedComponent);
 }
 
 export const MapConsumer = Consumer;
